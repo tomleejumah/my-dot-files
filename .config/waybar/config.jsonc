@@ -169,7 +169,6 @@
 		"tooltip-format-enumerate-connected-battery": "Device: {device_alias}\nBattery: {device_battery_percentage}%"
 	},
 
-
     "hyprland/workspaces": {
       "disable-scroll": true,
       "format": "{id}",             

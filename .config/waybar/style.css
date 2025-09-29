@@ -134,8 +134,8 @@
 
 #workspaces button.active {
   font-weight: bold;
-  font-size: 18px;
-  color: @white;
+  font-size: 13px;
+  color: @blue;
   /* background: rgba(255, 255, 255, 0.2); */
   border-radius: 4px;
 }

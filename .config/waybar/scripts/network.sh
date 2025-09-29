@@ -2,9 +2,6 @@
 #
 # Connect to a Wi-Fi network using nmcli and fzf
 #
-# Author: Jesse Mirabel <github.com/sejjy>
-# Created: August 11, 2025
-# License: MIT
 
 WIFI_PID="/tmp/wifi_script.pid"
 # Check if already running
@@ -19,7 +16,7 @@ echo $$ > "$WIFI_PID"
 trap 'rm -f "$WIFI_PID"' EXIT
 
 # shellcheck disable=SC1091
-source "$HOME/.config/waybar/scripts/theme-switcher.sh" 'fzf'
+# source "$HOME/.config/waybar/scripts/theme-switcher.sh" 'fzf'
 
 status=$(nmcli radio wifi)
 
