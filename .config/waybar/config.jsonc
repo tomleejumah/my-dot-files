@@ -203,7 +203,7 @@
 	-------------------*/
 
 	"pulseaudio#output": {
-		"format": "{icon}  {volume}%",
+		"format": "{icon}   {volume}%",
 		// "format-bluetooth":
 		"format-muted": "󰝟 {volume}%",
 		// "format-source":
@@ -240,7 +240,7 @@
 		"format": "{format_source}",
 		// "format-bluetooth":
 		// "format-muted":
-		"format-source": "󰍬  {volume}%",
+		"format-source": "󰍬   {volume}%",
 		"format-source-muted": "󰍭 {volume}%",
 		// "format-icons":
 		// "rotate":

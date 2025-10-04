@@ -36,6 +36,8 @@
     "title": {
       "text": "Notifications",
       "clear-all-button": true,
+      "notification-body-lines": 3,
+      "notification-truncate": true,
       "button-text": "Clear"
     },
     "mpris": {
