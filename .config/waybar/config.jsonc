@@ -87,7 +87,7 @@
 		"max-length": 7,
 		// "rotate":
 		"states": {
-			"warning": 75,
+			"warning": 80,
 			"critical": 90
 		},
 		"tooltip": false

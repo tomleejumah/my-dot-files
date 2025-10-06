@@ -15,7 +15,7 @@
 @define-color green	#98971a;
 @define-color yellow	#d79921;
 @define-color blue	#458588;
-@define-color purple	#b16286;
+@define-color purple	#CF4F7E;
 @define-color aqua	#689d6a;
 @define-color gray	#a89984;
 @define-color brgray	#928374;
@@ -27,6 +27,8 @@
 @define-color braqua	#8ec07c;
 @define-color white	#ebdbb2;
 @define-color bg2	#504945;
+@define-color myblue #3826F7;
+@define-color mypurple #A026F7;
 
 @define-color warning 	@bryellow;
 @define-color critical	@red;
@@ -36,8 +38,8 @@
 @define-color inactive	@purple;
 @define-color sound	@brpurple;
 @define-color network	@purple;
-@define-color memory	@braqua;
-@define-color cpu	@green;
+@define-color memory	@myblue;
+@define-color cpu	@mypurple;
 @define-color temp	@brgreen;
 @define-color layout	@bryellow;
 @define-color battery	@aqua;
@@ -163,7 +165,7 @@
 
 #memory {
   background: @memory;
-  color: @black;
+  color: @white;
 }
 
 #cpu {
