@@ -143,7 +143,7 @@
 }
 /* Urgent workspace (optional, still visible) */
 #workspaces button.urgent {
-  color: @warning;
+  color: @red;
   font-weight: bold;
 }
 
