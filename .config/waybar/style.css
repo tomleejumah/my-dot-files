@@ -60,13 +60,10 @@
 
 /* The whole bar */
 #waybar {
-  background: rgba(40, 40, 40, 0.8784313725); /* #282828e0 */
+  background: #000000; /* pure black */
   color: @white;
-  font-family:
-    JetBrains Mono,
-    Siji;
+  font-family: JetBrains Mono, Siji;
   font-size: 10pt;
-  /*font-weight: bold;*/
 }
 
 /* Each module */
