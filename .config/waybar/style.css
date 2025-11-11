@@ -62,7 +62,9 @@
 #waybar {
   background: #000000; /* pure black */
   color: @white;
-  font-family: JetBrains Mono, Siji;
+  font-family:
+    JetBrains Mono,
+    Siji;
   font-size: 10pt;
 }
 
@@ -124,6 +126,8 @@
 }
 
 #workspaces button {
+/*   pointer-events: none !important; */
+  /* cursor: default !important; */
   color: @white;
   background: transparent;
   font-size: 13px;

@@ -26,9 +26,7 @@
 		"clock#time"
 	],
 
-
 	// Modules
-
 	"battery": {
 		"interval": 10,
 		"states": {
@@ -92,7 +90,6 @@
 		},
 		"tooltip": false
 	},
-
 	
     "memory": {
         "interval": 10,
@@ -108,36 +105,36 @@
         "tooltip-format": "Memory Used: {used:0.1f} GB / {total:0.1f} GB\nSwap Used: {swapUsed:0.1f} GB / {swapTotal:0.1f} GB"
       },
 
-      "network": {
-		"interval": 5,
-		"format-ethernet": "󰈀 ",
-		"format-wifi": "{icon}",
-		"format-disconnected": "󰤯 ",
-		"format-disabled": "󰤮 ",
-		// "format-alt":
-		"format-icons": [
-			"󰤟 ", "󰤢 ", "󰤥 ", "󰤨 "
-		],
-		// "rotate":
-		"min-length": 2,
-		"max-length": 2,
-		"on-click": "kitty ~/.config/waybar/scripts/network.sh",
-		// "on-click-middle":
-		"on-click-right": "nmcli radio wifi off && notify-send 'Wi-Fi Disabled' -r 1125",
-		"tooltip":true,
-		"tooltip-format": "Gateway: {gwaddr}",
-		"tooltip-format-ethernet": "Interface: {ifname}",
-		"tooltip-format-wifi": "Network: {essid}\nIP Addr: {ipaddr}/{cidr}\nStrength: {signalStrength}%\nFrequency: {frequency} GHz",
-		"tooltip-format-disconnected": "Wi-Fi Disconnected",
-		"tooltip-format-disabled": "Wi-Fi Disabled"
-	
-	// "network": {
-		// "interval": 5,
-		// "format-wifi": " ",
-		// "format-ethernet": "   {ifname}", "format-disconnected": "No connection",
-		// "format-alt": "   {ipaddr}/{cidr}",
-		// "tooltip": true
-	},
+    "network": {
+      "interval": 5,
+      "format-ethernet": "󰈀 ",
+      "format-wifi": "{icon}",
+      "format-disconnected": "󰤯 ",
+      "format-disabled": "󰤮 ",
+      // "format-alt":
+      "format-icons": [
+          "󰤟 ", "󰤢 ", "󰤥 ", "󰤨 "
+      ],
+      // "rotate":
+      "min-length": 2,
+      "max-length": 2,
+      "on-click": "kitty ~/.config/waybar/scripts/network.sh",
+      // "on-click-middle":
+      "on-click-right": "nmcli radio wifi off && notify-send 'Wi-Fi Disabled' -r 1125",
+      "tooltip":true,
+      "tooltip-format": "Gateway: {gwaddr}",
+      "tooltip-format-ethernet": "Interface: {ifname}",
+      "tooltip-format-wifi": "Network: {essid}\nIP Addr: {ipaddr}/{cidr}\nStrength: {signalStrength}%\nFrequency: {frequency} GHz",
+      "tooltip-format-disconnected": "Wi-Fi Disconnected",
+      "tooltip-format-disabled": "Wi-Fi Disabled"
+  
+  // "network": {
+      // "interval": 5,
+      // "format-wifi": " ",
+      // "format-ethernet": "   {ifname}", "format-disconnected": "No connection",
+      // "format-alt": "   {ipaddr}/{cidr}",
+      // "tooltip": true
+  },
 
     "bluetooth": {
 		// "controller":
@@ -174,7 +171,7 @@
       "format": "{id}",             
       "all-outputs": true,
       "disable-click":true,
-      "on-click":false,
+      // "on-click":false,
       // "on-click": "hyprctl dispatch workspace {id}",
       "active-only": false,
       "show-special": false,
@@ -207,7 +204,7 @@
 	"pulseaudio#output": {
 		"format": "{icon}   {volume}%",
 		// "format-bluetooth":
-		"format-muted": "󰝟 {volume}%",
+		"format-muted": "󰝟   {volume}%",
 		// "format-source":
 		// "format-source-muted":
 		"format-icons": {
@@ -243,7 +240,7 @@
 		// "format-bluetooth":
 		// "format-muted":
 		"format-source": "󰍬   {volume}%",
-		"format-source-muted": "󰍭 {volume}%",
+		"format-source-muted": "󰍭   {volume}%",
 		// "format-icons":
 		// "rotate":
 		// "states":
