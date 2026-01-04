@@ -30,7 +30,8 @@
   "widgets": [
     "mpris",
     "title",
-    "notifications"
+    "notifications",
+    "volume"
   ],
   "widget-config": {
     "title": {
