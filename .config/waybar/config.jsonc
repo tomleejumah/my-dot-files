@@ -33,11 +33,11 @@
 			"warning": 30,
 			"critical": 15
 		},
-		"format": "{icon}   {capacity}% ",
-		"format-charging": "   {capacity}% ",
-		"format-charging-full": "   {capacity}%",
-		"format-full": "{icon}   {capacity}%",
-		"format-alt": "{icon}   {power}",
+		"format": "{icon} {capacity}% ",
+		"format-charging": " {capacity}% ",
+		"format-charging-full": " {capacity}%",
+		"format-full": "{icon} {capacity}%",
+		"format-alt": "{icon} {power}",
 		"format-icons": [
 			"",
 			"",
@@ -78,9 +78,9 @@
 
     "cpu": {
 		"interval": 10,
-		"format": "󰍛    {usage}%",
-		"format-warning": "󰀨   {usage}%",
-		"format-critical": "󰀨   {usage}%",
+		"format": "󰍛  {usage}%",
+		"format-warning": "󰀨  {usage}%",
+		"format-critical": "󰀨  {usage}%",
 		"min-length": 7,
 		"max-length": 7,
 		// "rotate":
@@ -93,9 +93,9 @@
 	
     "memory": {
         "interval": 10,
-        "format": "󰘚   {percentage}%",
-        "format-warning": "󰀧   {percentage}%",
-        "format-critical": "󰀧   {percentage}%",
+        "format": "󰘚  {percentage}%",
+        "format-warning": "󰀧  {percentage}%",
+        "format-critical": "󰀧  {percentage}%",
         "states": {
             "warning": 75,
             "critical": 90
@@ -202,9 +202,9 @@
 	-------------------*/
 
 	"pulseaudio#output": {
-		"format": "{icon}   {volume}%",
+		"format": "{icon} {volume}%",
 		// "format-bluetooth":
-		"format-muted": "󰝟   {volume}%",
+		"format-muted": "󰝟  {volume}%",
 		// "format-source":
 		// "format-source-muted":
 		"format-icons": {
@@ -239,8 +239,8 @@
 		"format": "{format_source}",
 		// "format-bluetooth":
 		// "format-muted":
-		"format-source": "󰍬   {volume}%",
-		"format-source-muted": "󰍭   {volume}%",
+		"format-source": "󰍬 {volume}%",
+		"format-source-muted": "󰍭  {volume}%",
 		// "format-icons":
 		// "rotate":
 		// "states":
@@ -264,7 +264,7 @@
 	"temperature": {
 		"critical-threshold": 90,
 		"interval": 5,
-		"format": "{icon}  {temperatureC}°",
+		"format": "{icon} {temperatureC}°",
 		"format-icons": [
 			"",
 			"",
