@@ -78,6 +78,7 @@
 #network,
 #pulseaudio,
 #bluetooth,
+#backlight,
 #tray,
 #backlight,
 #idle_inhibitor,
@@ -126,7 +127,7 @@
 }
 
 #workspaces button {
-/*   pointer-events: none !important; */
+  /*   pointer-events: none !important; */
   /* cursor: default !important; */
   color: @white;
   background: transparent;
@@ -155,6 +156,11 @@
 }
 
 #pulseaudio {
+  background: @sound;
+  color: @black;
+}
+
+#backlight {
   background: @sound;
   color: @black;
 }

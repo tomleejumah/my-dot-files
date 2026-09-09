@@ -9,6 +9,7 @@
 	"modules-right": [
 		"custom/arrow9",
         "pulseaudio#input",
+        "backlight",
         "pulseaudio#output",
 		"custom/arrow8",
 		"network",
@@ -47,6 +48,22 @@
 		],
 		"tooltip": false
 	},
+
+    "backlight": {
+    "device": "intel_backlight",
+    "format": "{icon} {percent}%",
+    "format-icons": [
+        "󰃞",
+        "󰃝",
+        "󰃟",
+        "󰃠"
+    ],
+    "min-length": 7,
+    "max-length": 7,
+    "scroll-step": 5,
+    "on-click": "pkill wlsunset || wlsunset -t 4000 -T 6500",
+    "tooltip": false
+},
 
 	"clock#time": {
 		"interval": 10,
