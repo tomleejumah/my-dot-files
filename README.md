@@ -1,134 +1,129 @@
 # Arch Linux Dotfiles
 
-My personal Arch Linux configuration, managed using a **bare Git repository**.
+Personal Arch Linux workstation configuration managed with a **bare Git repository**. Includes Hyprland (Lua config), Waybar, SwayNC, Kitty, Neovim, SDDM Astronaut theme, and developer tooling.
 
-Includes Hyprland, Waybar, Kitty, SwayNC, Neovim, SDDM, development tools, and system configuration.
+## Fresh Arch installation
 
-## Installation
-
-### 1. Install prerequisites
+Install Git and run the bootstrap installer from a temporary checkout. **Do not run as root**; the installer will prompt for sudo.
 
 ```bash
-sudo pacman -S --needed git openssh
+sudo pacman -S --needed git
+git clone https://github.com/tomleejumah/my-dot-files.git /tmp/my-dot-files
+bash /tmp/my-dot-files/install.sh --yes --with-virt --with-kernels
 ```
 
-### 2. Clone the dotfiles repository
+The installer clones the repository as `~/.dotfiles` (a **bare repo**) if not already present, backs up files that conflict with tracked paths under `~/dotfiles-backup-<timestamp>`, and checks out the dotfiles into `$HOME`. It installs system packages, enables services, restores the SDDM Astronaut theme (or obtains the upstream theme if the tracked copy is missing), initializes Rust, and attempts to sync tmux/Neovim plugins.
 
-```bash
-git clone --bare git@github.com:tomleejumah/my-dot-files.git "$HOME/.dotfiles"
-```
+**Important:** Review `install.sh` before running it. `--yes` disables package-manager confirmation prompts, and `--with-kernels` installs additional kernels, DKMS and related packages. Make sure the intended bootloader supports the resulting setup. The script may modify existing settings and enable services.
 
-### 3. Restore configuration
+### Installer options
 
-```bash
-alias config='git --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
-config config --local status.showUntrackedFiles no
-config checkout
-```
+| Option | Effect |
+|---|---|
+| `--yes` | Passes noninteractive confirmation flags to pacman/yay |
+| `--with-virt` | Adds QEMU, libvirt, virt-manager, OVMF, dnsmasq, swtpm, SPICE agent and Waydroid; enables libvirt socket and adds the user to `libvirt,kvm` |
+| `--with-kernels` | Adds Linux headers, LTS and Zen kernels/headers, DKMS and v4l2loopback; regenerates GRUB config **only if** `/boot/grub/grub.cfg` exists |
+| `--with-android` | Installs Android Studio through yay (if available) |
+| `--skip-aur` | Skips yay bootstrap and AUR packages |
+| `--no-sddm` | Skips SDDM service enablement and theme restoration |
+| `--reflect` | Attempts to refresh package mirrors with reflector |
 
-**Warning:** Back up conflicting files before checkout. Git will refuse to overwrite existing untracked files.
-
-### 4. Run the installer
-
-```bash
-chmod +x ~/install.sh
-./install.sh
-```
-
-### Additional installation command
-
-Keep this command for installations requiring virtualization and kernel options:
+Use this full setup command when you want virtualization and extra kernels:
 
 ```bash
 ./install.sh --yes --with-virt --with-kernels
 ```
 
-**Note:** These flags require support in `install.sh`. The current installer does not implement them yet, so this command does not currently enable virtualization or additional kernels.
+For Android Studio, also include `--with-android`. Modern CSV is attempted through AUR by default unless `--skip-aur` is set.
 
-## Installed Software
+### What gets installed
 
-| Category | Software |
-|---|---|
-| Window manager | Hyprland |
-| Login manager | SDDM (Astronaut theme) |
-| Lock screen | Hyprlock |
-| Status bar | Waybar |
-| Notifications | SwayNC |
-| Terminal | Kitty |
-| Browser | Firefox |
-| File manager | Nautilus |
-| Editors | Neovim, Gedit, AbiWord |
-| Disk management | GNOME Disks |
-| Development | Node.js, npm, Python, Rust, Java |
-| Android development | Android Studio (optional) |
-| CSV editor | Modern CSV (optional) |
-| Networking | NetworkManager, BlueZ |
-| Audio | PipeWire, WirePlumber |
+- **Desktop:** Hyprland, SDDM, Hyprlock, Waybar, SwayNC, Kitty, Firefox, Nautilus, Gedit, AbiWord, GNOME Disks, Wofi, and XDG user directories.
+- **Media & system:** PipeWire, WirePlumber, NetworkManager, BlueZ, Tailscale, UFW (installed but not enabled), VLC, OBS Studio and screenshot/recording tools.
+- **Development:** Neovim, Git, Node.js, npm, pnpm, Python, Rust via rustup, Go, Ruby, Java (OpenJDK), tmux and CLI tools.
+- **Theme:** SDDM Astronaut theme, font packages and required Qt6 components.
+- **Optional:** Android Studio, extra virtualization packages/kernels via flags.
+
+The installer skips package names not available in configured pacman repositories, with a warning. It also bootstraps `yay` when AUR is enabled.
 
 ## Secrets
 
-API tokens are stored locally in:
-
-```text
-~/.config/secrets/env
-```
-
-The directory is excluded from Git tracking.
+Secrets are **not stored in this public Git repository**. The installer creates `~/.config/secrets/env` with restricted permissions when missing.
 
 ```bash
-mkdir -p ~/.config/secrets
-chmod 700 ~/.config/secrets
 nvim ~/.config/secrets/env
-chmod 600 ~/.config/secrets/env
 ```
 
 Example:
 
 ```bash
-export WAKATIME_OAUTH_TOKEN="your-token"
+export WAKATIME_OAUTH_TOKEN="paste-your-own-token"
 ```
 
-Never commit plaintext credentials.
+Keep `.config/secrets/` ignored in `~/.gitignore`. You generally do not need to reapply `chmod 600` after ordinary in-place edits; the installer enforces it during setup.
 
-## SDDM Theme
+## SDDM theme
 
-The active login theme is `sddm-astronaut-theme`.
-
-Tracked backup:
+The chosen theme is `sddm-astronaut-theme`. The tracked backup is:
 
 ```text
 ~/.config/sddm-backup/
-├── sddm.conf.d/
-│   └── theme.conf
-└── themes/
-    └── sddm-astronaut-theme/
+├── sddm.conf.d/theme.conf
+└── themes/sddm-astronaut-theme/
 ```
 
-The installer restores these files into their system locations and enables SDDM.
+The installer restores the theme and configuration to SDDM's system paths, falling back to the upstream theme if the backup isn't in the repository. Additional fonts and QML dependencies may vary by theme variant.
 
-## Managing Dotfiles
+## Working with the bare repository
 
-The `config` alias uses Git with `$HOME` as the working tree.
+The repository metadata lives in `~/.dotfiles`; the working tree is `$HOME`.
+
+Persist this alias in `~/.bashrc` (the installer also sets it up):
+
+```bash
+alias config='git --git-dir="$HOME/.dotfiles" --work-tree="$HOME"'
+```
+
+To track and push local changes:
 
 ```bash
 config status
-config add .config/hypr
-config commit -m "Update Hyprland configuration"
+config add .config/hypr README.md
+config diff --cached
+config commit -m "Update dotfiles"
 config push origin master
 ```
 
-## Updating the Installer
+### Sync remote changes before pushing
+
+Fetch first; this does **not** modify any working files:
 
 ```bash
-nvim ~/install.sh
-bash -n ~/install.sh
-chmod +x ~/install.sh
-
-config add install.sh
-config commit -m "Update installation script"
-config push origin master
+config status
+config fetch origin
+config log --oneline --left-right HEAD...origin/master
 ```
+
+If your working tree is clean and your local branch has no commits ahead of the remote, fast-forward:
+
+```bash
+config merge --ff-only origin/master
+```
+
+If local commits are ahead of remote, consider `config rebase origin/master` **after** backing up/stashing uncommitted changes. Fix conflicts manually if Git reports any. Avoid `reset --hard` and forced checkout on a machine with local configurations you want to keep.
+
+For a README-only PR, branch from synced `master`:
+
+```bash
+config switch -c docs/update-readme
+# edit README.md
+config add README.md
+config commit -m "Document installer"
+config push -u origin docs/update-readme
+```
+
+Then open the PR on GitHub targeting `master`.
 
 ## Repository
 
-[github.com/tomleejumah/my-dot-files](https://github.com/tomleejumah/my-dot-files)
+https://github.com/tomleejumah/my-dot-files
