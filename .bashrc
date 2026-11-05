@@ -132,3 +132,4 @@ export PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH"
 if [[ -f "$HOME/.config/secrets/env" ]]; then
     source "$HOME/.config/secrets/env"
 fi
+alias config="git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
