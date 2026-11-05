@@ -27,6 +27,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("swaync")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("hyprpaper")
+    -- hl.exec_cmd("clipse -listen")
     -- hl.exec_cmd("hyprlock")
 
     -- sunrise-sunset night light
@@ -41,7 +42,17 @@ end)
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
+--[[ hl.env("XCURSOR_SIZE", "24")
+hl.env("HYPRCURSOR_SIZE", "24") ]]
+--[[ h1.config({
+    "XCURSOR_THEME","Adwaita",
+    "XCURSOR_SIZE","24",
+    "HYPRCURSOR_THEME","Adwaita",
+    "HYPRCURSOR_SIZE","24",
+}) ]]
+hl.env("XCURSOR_THEME", "Adwaita")
 hl.env("XCURSOR_SIZE", "24")
+hl.env("HYPRCURSOR_THEME", "Adwaita")
 hl.env("HYPRCURSOR_SIZE", "24")
 
 -----------------------
@@ -136,7 +147,7 @@ hl.config({
         kb_options = "",
         kb_rules = "",
         follow_mouse = 1,
-        sensitivity = 0.5,
+        sensitivity = 0.8,
         touchpad = { natural_scroll = true },
     },
 })
@@ -160,8 +171,9 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("swaync-client -t -sw"))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("power-menu"))
 hl.bind(mainMod .. " + T", hl.dsp.layout("togglesplit")) -- dwindle only
+-- hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("kitty --class clipse -e clipse"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("cliphist list | wofi --dmenu | cliphist decode | wl-copy"))
-hl.bind(mainMod .. " + SHIFT + H", hl.dsp.exec_cmd("systemctl hibernate"))
+hl.bind(mainMod .. " + SHIFT + H", hl.dsp.exec_cmd("systemctl suspend"))
 hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd("hyprlock"))
 
 -- Swap focused window with neighbor
@@ -173,12 +185,14 @@ hl.bind("SUPER + CTRL + down", hl.dsp.window.swap({ direction = "d" }))
 hl.bind("SUPER + Tab", hl.dsp.window.cycle_next({}))
 
 -- Screenshots
-hl.bind("Print", hl.dsp.exec_cmd(
-    "area=$(slurp) && grim -g \"$area\" - | wl-copy && grim -g \"$area\" ~/Pictures/Screenshots/$(date +'%Y%m%d_%H%M%S').png && notify-send \"Screenshot\" \"Area captured\""
-))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd(
-    "grim - | wl-copy && grim ~/Pictures/Screenshots/$(date +'%Y%m%d_%H%M%S').png && notify-send \"Screenshot\" \"Fullscreen captured\""
-))
+hl.bind("Print", hl.dsp.exec_cmd([[
+area=$(slurp) && f=~/Pictures/Screenshots/$(date +%Y%m%d_%H%M%S).png &&
+grim -g "$area" - | tee "$f" | wl-copy && notify-send "Screenshot" "Area saved"
+]]))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd([[
+f=~/Pictures/Screenshots/$(date +%Y%m%d_%H%M%S).png &&
+grim - | tee "$f" | wl-copy && notify-send "Screenshot" "Fullscreen saved"
+]]))
 
 -- Screen recording
 hl.bind("F9", hl.dsp.exec_cmd(
@@ -285,6 +299,20 @@ hl.window_rule({
         pin = false,
     },
     no_focus = true,
+})
+
+hl.window_rule({
+  match = { class = "clipse" },
+  float = true,
+  size = "622 652",
+  center = true,
+})
+
+-- Transparency for all application windows
+hl.window_rule({
+    name = "global-transparency",
+    match = { class = ".*" },
+    opacity = "0.93 override 0.90 override",
 })
 
 -- layer rules (unused, kept commented as in the original)
