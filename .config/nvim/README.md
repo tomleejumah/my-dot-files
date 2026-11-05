@@ -1,110 +1,164 @@
-## Java (jdtls) Configuration for cross-platform
+# Neovim Configuration
 
-The Current setup is configured to work with arch and Debian distros.To configure support for Windows, macOS, and Linux, with dynamic path detection, Use the following Guidance to configure the `jdtls` (Java Development Tools Language Server). This setup supports features like code completion, navigation, CodeLens, inlay hints, and formatting.
+Personal Lua-based Neovim configuration from the [Arch Linux dotfiles](https://github.com/tomleejumah/my-dot-files) repository.
 
-**Modify the following file `/lua/core/lsp.lua`**
+## Features
 
-### Prerequisites and Setup Instructions
+- Language Server Protocol (LSP) for Java, Kotlin, JavaScript/TypeScript, Python, Go, Rust, C/C++, PHP, Lua, HTML and CSS
+- Autocompletion, snippets, diagnostics, CodeLens, inlay hints and navigation
+- Telescope references and search, Treesitter folding, and Conform formatting
+- Custom keybindings, autosave, boilerplate helpers and TODO highlighting
+- Nerd Font symbols and persistent undo
 
-- **Neovim**: Version 0.9.x or higher  
-- **Plugins**:  
-  - neovim/nvim-lspconfig  
-  - williamboman/mason.nvim  
-  - hrsh7th/cmp-nvim-lsp  
-- **Java**:  
-  - JDK 21 (recommended)  
-  - Optionally JDK 17  
-- **Environment Variables** (optional):  
-  - JAVA_HOME: Path to JDK 21  
-  - JAVA_17_HOME: Path to JDK 17  
-  - JAVA_21_HOME: Path to JDK 21  
-  - LOMBOK_JAR: Path to Lombok JAR (if not using Mason’s default)  
+The configuration lives in `~/.config/nvim`. Its entry point is `init.lua`; LSP settings live in `lua/core/lsp.lua`.
 
-## ⚙️ Setup Instructions
+## Requirements
 
-- Ensure mason.nvim is configured to install jdtls:
+- **Neovim 0.11+**: this configuration uses `vim.lsp.config()` and `vim.lsp.enable()`
+- **Git**, **curl**, **unzip**, **ripgrep**, **fd**, and a terminal with true color support
+- **Nerd Font** (for icons); the Arch installer installs JetBrains Mono Nerd Font
+- Language runtimes for the languages you use:
+  - Java: **JDK 21**, with the configured Arch path `/usr/lib/jvm/java-21-openjdk`
+  - JavaScript/TypeScript: Node.js and npm
+  - Python: Python 3
+  - Rust: rustup and stable toolchain
+  - Go: Go toolchain
+  - C/C++: clang/clangd as needed
+- Language servers and formatters, usually installed through **Mason** or the system package manager
+
+The [root installer](../../install.sh) installs Neovim, common runtimes and tools, then attempts a headless `Lazy! sync`. It does not guarantee every language server and formatter is present.
+
+## Setup
+
+### With the Arch dotfiles installer
+
+For a new Arch Linux machine, follow the [root README](../../README.md) and run the installer. It restores `~/.config/nvim` as part of the bare Git checkout.
+
+### Neovim configuration only
+
+If you do not want the entire dotfiles setup:
+
+```bash
+sudo pacman -S --needed neovim git curl unzip ripgrep fd nodejs npm jdk-openjdk
+git clone https://github.com/tomleejumah/my-dot-files.git /tmp/my-dot-files
+mkdir -p ~/.config
+# Back up your existing configuration before replacing it:
+[[ ! -e ~/.config/nvim ]] || mv ~/.config/nvim ~/.config/nvim.backup
+cp -a /tmp/my-dot-files/.config/nvim ~/.config/nvim
+nvim
+```
+
+The plugin manager is initialized by `lua/core/plugins.lua`. After opening Neovim, use the plugin manager's sync/install command if necessary:
+
+```vim
+:Lazy sync
+```
+
+Then inspect language server installation and health:
+
+```vim
+:Mason
+:checkhealth
+:LspInfo
+```
+
+`Mason` and `Lazy` commands require their corresponding plugins to be installed and loaded.
+
+## Keybindings
+
+The leader key is **Space**.
+
+| Key | Action |
+|---|---|
+| `gd` | Go to definition |
+| `gD` | Go to declaration |
+| `gr` | Find references with Telescope |
+| `gt` | Go to type definition |
+| `K` | Hover documentation |
+| `<leader>ca` | Code actions |
+| `<leader>rn` | Rename symbol |
+| `<leader>wa` / `<leader>wr` | Add/remove workspace folder |
+| `<leader>cl` | Run CodeLens |
+| `<C-Space>` (insert) | Trigger completion |
+| `<CR>` (insert) | Confirm completion |
+| `<Tab>` (insert) | Expand/jump snippet if available |
+
+Other mappings are defined in `lua/core/mappings.lua`.
+
+## Language servers and formatting
+
+`lua/core/lsp.lua` configures:
+
+| Language | LSP | Formatter(s) configured |
+|---|---|---|
+| Java | jdtls | google-java-format |
+| Kotlin | kotlin_language_server | ktlint |
+| JS/TS | ts_ls | prettier |
+| Python | pyright, ruff | black |
+| Go | gopls | gofmt |
+| Rust | rust_analyzer | rustfmt |
+| C/C++ | clangd | clang-format |
+| PHP | intelephense | php-cs-fixer |
+| Lua | lua_ls | stylua |
+| HTML/CSS | html, cssls, emmet_ls | prettier |
+| XML | — | xmllint, prettier |
+
+Formatter configuration is provided through Conform. The current configuration disables format-on-save and sets up formatting on leaving insert mode; inspect `lua/core/lsp.lua` to change that behavior.
+
+## Troubleshooting
+
+```bash
+nvim --version
+java -version
+command -v node npm rg fd
+```
+
+Inside Neovim, use `:checkhealth`, `:Mason`, and `:LspInfo` to diagnose missing plugins or language servers. For Java specifically, verify the JDK path and Mason jdtls files described below.
+
+---
+
+## Java / jdtls configuration (advanced)
+
+This section is intentionally last: **the current `lua/core/lsp.lua` is Arch/Linux-specific**, and the example below is guidance for making Java setup portable. It is **not** already implemented in the repository.
+
+### Current Java assumptions
+
+The checked-in configuration:
+
+- Invokes `/usr/lib/jvm/java-21-openjdk/bin/java`
+- Uses Mason's `~/.local/share/nvim/mason/packages/jdtls` installation
+- Looks for the launcher JAR under `plugins/org.eclipse.equinox.launcher_*.jar`
+- Uses `config_linux`, a Lombok agent and `~/.cache/jdtls-workspace/`
+- Sets Java 21 as the default runtime
+
+Ensure jdtls is installed through Mason and JDK 21 is available before opening a Java project.
+
+### Making jdtls portable
+
+Edit `~/.config/nvim/lua/core/lsp.lua` to derive paths instead of hard-coding the Arch installation:
 
 ```lua
-require("mason-lspconfig").setup({
-  ensure_installed = { "jdtls" }
-})
+local is_windows = vim.fn.has("win32") == 1
+local is_mac = vim.fn.has("mac") == 1
+local sep = is_windows and "\\" or "/"
 
-```lua
--- Java (jdtls) Configuration
-local function get_jdtls_paths()
-  local java_home = os.getenv("JAVA_HOME") or (
-    vim.fn.has("win32") == 1 and "C:\\Program Files\\Java\\jdk-21" or
-    vim.fn.has("mac") == 1 and "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home" or
-    "/usr/lib/jvm/java-21-openjdk"
-  )
-  local mason_path = vim.fn.stdpath("data") .. (vim.fn.has("win32") == 1 and "\\mason\\packages\\jdtls" or "/mason/packages/jdtls")
-  local lombok_path = os.getenv("LOMBOK_JAR") or (mason_path .. (vim.fn.has("win32") == 1 and "\\lombok.jar" or "/lombok.jar"))
-  local config_dir = mason_path .. (
-    vim.fn.has("win32") == 1 and "\\config_win" or
-    vim.fn.has("mac") == 1 and "/config_mac" or
-    "/config_linux"
-  )
-  local data_dir = (vim.fn.stdpath("cache") .. (vim.fn.has("win32") == 1 and "\\jdtls-workspace\\" or "/jdtls-workspace/")) .. vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
-  return java_home, lombok_path, config_dir, data_dir
-end
+local java_home = vim.env.JAVA_HOME
+  or (is_windows and [[C:\Program Files\Java\jdk-21]])
+  or (is_mac and "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home")
+  or "/usr/lib/jvm/java-21-openjdk"
 
-local java_home, lombok_path, config_dir, data_dir = get_jdtls_paths()
-local java_17_path = os.getenv("JAVA_17_HOME") or (
-  vim.fn.has("win32") == 1 and "C:\\Program Files\\Java\\jdk-17" or
-  vim.fn.has("mac") == 1 and "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" or
-  "/usr/lib/jvm/java-17-openjdk"
-)
-local java_21_path = os.getenv("JAVA_21_HOME") or (
-  vim.fn.has("win32") == 1 and "C:\\Program Files\\Java\\jdk-21" or
-  vim.fn.has("mac") == 1 and "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home" or
-  "/usr/lib/jvm/java-21-openjdk"
-)
+local mason = vim.fn.stdpath("data") .. sep .. "mason" .. sep .. "packages" .. sep .. "jdtls"
+local java_bin = java_home .. sep .. "bin" .. sep .. (is_windows and "java.exe" or "java")
+local launcher = vim.fn.glob(mason .. sep .. "plugins" .. sep .. "org.eclipse.equinox.launcher_*.jar")
+local config_dir = mason .. sep .. (is_windows and "config_win" or is_mac and "config_mac" or "config_linux")
+local lombok = vim.env.LOMBOK_JAR or (mason .. sep .. "lombok.jar")
+local workspace = vim.fn.stdpath("cache") .. sep .. "jdtls-workspace" .. sep
+  .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 
-lspconfig.jdtls.setup({
-  cmd = {
-    java_home .. (vim.fn.has("win32") == 1 and "\\bin\\java.exe" or "/bin/java"),
-    '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-    '-Dosgi.bundles.defaultStartLevel=4',
-    '-Declipse.product=org.eclipse.jdt.ls.core.product',
-    '-Dlog.protocol=true',
-    '-Dlog.level=ALL',
-    '-Xmx1g',
-    '--add-modules=ALL-SYSTEM',
-    '--add-opens', 'java.base/java.util=ALL-UNNAMED',
-    '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
-    '-javaagent:' .. lombok_path,
-    '-jar', vim.fn.glob(mason_path .. (vim.fn.has("win32") == 1 and "\\plugins\\org.eclipse.equinox.launcher_*.jar" or "/plugins/org.eclipse.equinox.launcher_*.jar")),
-    '-configuration', config_dir,
-    '-data', data_dir,
-  },
-  root_dir = lspconfig.util.root_pattern('pom.xml', 'build.gradle', 'gradlew', 'mvnw', '.git'),
-  settings = {
-    java = {
-      referencesCodeLens = { enabled = true },
-      implementationsCodeLens = { enabled = true },
-      inlayHints = { parameterNames = { enabled = "all" } },
-      maven = { downloadSources = true },
-      references = { includeDecompiledSources = true },
-      format = { enabled = true },
-      completion = {
-        favoriteStaticMembers = {
-          "org.junit.Assert.*",
-          "org.junit.Assume.*",
-          "org.junit.jupiter.api.Assertions.*",
-          "java.util.Objects.requireNonNull",
-          "java.util.Objects.requireNonNullElse",
-        },
-        importOrder = { "java", "javax", "com", "org" },
-      },
-      configuration = {
-        runtimes = {
-          { name = "JavaSE-17", path = java_17_path, default = true },
-          { name = "JavaSE-21", path = java_21_path },
-        },
-      },
-    },
-  },
-  init_options = { bundles = {} },
-  on_attach = on_attach,
-  capabilities = capabilities,
-})
+-- Use java_bin, launcher, config_dir, lombok and workspace
+-- in the existing vim.lsp.config("jdtls", { cmd = { ... } }) block.
+```
+
+Before adapting the `cmd` block, check that the launcher JAR, Lombok agent and OS-specific configuration directory exist. For multi-JDK projects, add runtime entries only for installed JDKs and set `JAVA_HOME` (and optionally `LOMBOK_JAR`) in your environment.
+
+This repository uses Neovim's modern `vim.lsp.config("jdtls", ...)` API. Avoid copying older `lspconfig.jdtls.setup(...)` examples without adapting them.
