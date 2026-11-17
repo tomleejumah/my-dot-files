@@ -133,3 +133,4 @@ if [[ -f "$HOME/.config/secrets/env" ]]; then
     source "$HOME/.config/secrets/env"
 fi
 alias config="git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
+export PATH="$HOME/.cargo/bin:$PATH"

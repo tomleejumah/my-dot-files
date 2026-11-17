@@ -17,7 +17,7 @@ return require("lazy").setup({
 	-- Treesitter for better syntax highlighting
     {
         "nvim-treesitter/nvim-treesitter",
-        branch = "master",
+        branch = "main",
         build = ":TSUpdate",
     },
     -- Context
@@ -39,9 +39,9 @@ return require("lazy").setup({
 			-- refer to the configuration section below
 		},
 	},
+    --
 	-- Enhanced f/t motions
 	{
---[[ 		"ggandor/leap.nvim", ]]
         url = "https://codeberg.org/andyg/leap.nvim",
 		config = function()
 			require("leap").add_default_mappings()
@@ -276,23 +276,23 @@ return require("lazy").setup({
 
 	-- Markdown
     --
-    {
+    --[[ {
       "iamcco/markdown-preview.nvim",
       ft = { "markdown" },
       cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
       build = "cd app && npm install",
     },
-	--[[ {
-		"iamcco/markdown-preview.nvim",
-		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-		ft = { "markdown" },
-		build = function()
-			vim.fn["mkdp#util#install"]()
-		end,
-		config = function()
-			vim.g.mkdp_auto_start = 1
-		end,
-	},
+]]
+{
+  "MeanderingProgrammer/render-markdown.nvim",
+  dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+  opts = {
+    -- Render in Normal ('n') and Command ('c') modes; show raw text in Insert ('i') and Visual ('v')
+    render_modes = { "n", "c" },
+  },
+}
+,
+
 	-- Wakatime ]]
 	{ "wakatime/vim-wakatime" },
 

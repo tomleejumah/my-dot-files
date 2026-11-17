@@ -77,7 +77,7 @@ PACKAGES=(
     # Essentials
     git openssh curl wget rsync base-devel unzip zip tar jq fzf ripgrep fd
     less which usbutils dmidecode pacman-contrib tmux fastfetch rclone
-    exfat-utils fzf
+    exfat-utils fzf tree-sitter-cli
 
     # Hyprland
     hyprland hyprlock hypridle hyprpaper

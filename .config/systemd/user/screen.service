@@ -1,3 +1,0 @@
-[Service]
-Type=oneshot
-ExecStart=%h/.local/lib/portfolio-collectors/screen.sh

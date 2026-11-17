@@ -1,4 +1,4 @@
-require("nvim-treesitter.configs").setup({
+--[[ require("nvim-treesitter.configs").setup({
   ensure_installed = {
     "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "java",
     "go", "rust", "kotlin", "javascript", "html", "css", "gitignore", "tsx",
@@ -19,4 +19,26 @@ require("nvim-treesitter.configs").setup({
     end,
     additional_vim_regex_highlighting = false,
   },
+}) ]]
+
+
+require("nvim-treesitter").install({
+    "c", "lua", "vim", "vimdoc", "query",
+    "markdown", "markdown_inline",
+    "java", "go", "rust", "kotlin",
+    "javascript", "html", "css", "gitignore",
+    "tsx", "typescript", "python", "bash",
+    "json", "yaml", "toml", "dockerfile", "sql",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    callback = function(args)
+        local lang = vim.treesitter.language.get_lang(
+            vim.bo[args.buf].filetype
+        )
+
+        if lang then
+            pcall(vim.treesitter.start, args.buf, lang)
+        end
+    end,
 })

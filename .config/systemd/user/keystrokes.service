@@ -1,6 +1,0 @@
-[Service]
-ExecStart=%h/.local/lib/portfolio-collectors/keystrokes.sh
-Restart=on-failure
-RestartSec=10
-[Install]
-WantedBy=default.target

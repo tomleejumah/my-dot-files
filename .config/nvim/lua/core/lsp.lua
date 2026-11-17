@@ -169,7 +169,6 @@ vim.lsp.config("kotlin_language_server", {
 -- Java (jdtls) Configuration
 vim.lsp.config("jdtls", {
 	cmd = {
-		-- "/usr/lib/jvm/java-21-openjdk" .. "/bin/java",
 		"/usr/lib/jvm/java-21-openjdk/bin/java",
 		"-Declipse.application=org.eclipse.jdt.ls.core.id1",
 		"-Dosgi.bundles.defaultStartLevel=4",
@@ -331,24 +330,6 @@ vim.lsp.config("intelephense", {
 		},
 	},
 })
-
--- Lua
---[[ require("lspconfig").lua_ls.setup({
-	settings = {
-		Lua = {
-			diagnostics = {
-				globals = { "vim" },
-			},
-			workspace = {
-				library = vim.api.nvim_get_runtime_file("", true),
-				checkThirdParty = false,
-			},
-			telemetry = {
-				enable = false,
-			},
-		},
-	},
-}) ]]
 
 vim.lsp.config("lua_ls", {
 	on_attach = on_attach,
